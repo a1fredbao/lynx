@@ -2,6 +2,7 @@ import importlib
 from pathlib import Path
 from zipfile import ZipFile
 
+from pygments.formatters.img import FontNotFound
 from lynx.sdk import Packer, codesnap
 
 codesnap_module = importlib.import_module("lynx.sdk.codesnap")
@@ -63,13 +64,13 @@ def test_codesnap_falls_back_to_available_font(tmp_path: Path, monkeypatch) -> N
     def fake_formatter(*, style: str, line_numbers: bool, font_name: str):
         attempts.append(font_name)
         if font_name == "missing-font":
-            raise codesnap_module.FontNotFound("missing")
+            raise FontNotFound("missing")
         return object()
 
     monkeypatch.setattr(codesnap_module, "ImageFormatter", fake_formatter)
-    monkeypatch.setattr(codesnap_module, "highlight", lambda snippet, lexer, formatter: b"png-bytes")
+    monkeypatch.setattr(codesnap_module, "highlight", lambda _snippet, _lexer, _formatter: b"png-bytes")
 
-    result = codesnap_module.codesnap(str(src), lines=(1, 1), output_path=str(out))
+    result = codesnap(str(src), lines=(1, 1), output_path=str(out))
 
     assert Path(result).exists()
     assert Path(result).read_bytes() == b"png-bytes"

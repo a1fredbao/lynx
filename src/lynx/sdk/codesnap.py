@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sys
+from typing import cast
 from pathlib import Path
 from pygments import highlight
 from pygments.formatters import ImageFormatter
@@ -13,20 +14,24 @@ def _font_candidates() -> list[str]:
         return ["Menlo", "SF Mono", "Monaco", "DejaVu Sans Mono", "Courier New"]
     if sys.platform.startswith("win"):
         return ["Consolas", "Cascadia Mono", "Courier New", "DejaVu Sans Mono"]
-    return ["DejaVu Sans Mono", "Liberation Mono", "Noto Sans Mono", "Courier New"]
+    if sys.platform.startswith(("linux", "freebsd", "openbsd", "netbsd")):
+        return ["DejaVu Sans Mono", "Liberation Mono", "Noto Sans Mono", "Courier New"]
+    return []
 
 
 def _build_formatter(theme: str) -> ImageFormatter:
+    candidates = _font_candidates()
+    if not candidates:
+        raise FontNotFound("No usable fonts configured for this platform")
+
     last_error: FontNotFound | None = None
-    for font_name in _font_candidates():
+    for font_name in candidates:
         try:
             return ImageFormatter(style=theme, line_numbers=True, font_name=font_name)
         except FontNotFound as error:
             last_error = error
 
-    if last_error is not None:
-        raise last_error
-    raise RuntimeError("No font candidates configured")
+    raise cast(FontNotFound, last_error)
 
 
 def codesnap(src_file: str, lines: tuple[int, int], output_path: str, theme: str = "monokai") -> str:
