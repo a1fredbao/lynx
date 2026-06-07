@@ -40,6 +40,15 @@ def codesnap(
     output_path: str,
     theme: str = "monokai",
 ) -> str:
+    """
+    Generate a syntax-highlighted image snapshot of specific lines from a source code file.
+
+    args:
+    - src_file: Path to the source code file.
+    - lines: A tuple (start, end) or a list of such tuples specifying line ranges to include in the snapshot. Line numbers are 1-based.
+    - output_path: Path where the generated image will be saved.
+    - theme: Pygments style to use for syntax highlighting (default: "monokai"). You can choose from any style supported by Pygments
+    """
     src = Path(src_file)
     if not src.exists() or not src.is_file():
         raise FileNotFoundError(f"Source file not found: {src_file}")

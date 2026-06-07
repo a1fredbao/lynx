@@ -21,6 +21,16 @@ class Packer:
         return pathspec.PathSpec.from_lines("gitignore", lines)
 
     def add_file(self, src_path: str, dest_path: str | None = None) -> None:
+        """
+        Add a single file to the pack.
+
+        If dest_path is not provided, the file will be stored with its path relative to the base directory.
+
+        args:
+        - src_path: The path to the source file to be added.
+        - dest_path: Optional path to store the file in the archive. If not provided, the file's path relative to the base directory will be used.
+        """
+
         src = (self.base_dir / src_path).resolve()
         if not src.exists() or not src.is_file():
             raise FileNotFoundError(f"File not found: {src_path}")
@@ -51,6 +61,14 @@ class Packer:
         dest_dir: str | None = None,
         ignore_patterns: list[str] | None = None,
     ) -> None:
+        """
+        Add a folder and its contents to the pack. The directory structure will be preserved.
+
+        args:
+        - src_dir: The path to the source directory to be added.
+        - dest_dir: Optional path to store the directory in the archive. If not provided, the directory's path relative to the base directory will be used.
+        - ignore_patterns: Optional list of glob patterns to ignore. Patterns will be matched against both the file/directory name and the path relative to the base directory. For example, ["*.csv", "__pycache__"] will ignore all CSV files and any file or directory under a __pycache__ directory.
+        """
         source = (self.base_dir / src_dir).resolve()
         if not source.exists() or not source.is_dir():
             raise NotADirectoryError(f"Directory not found: {src_dir}")
@@ -67,6 +85,12 @@ class Packer:
             self.items.append((path, arcname))
 
     def build(self, output_filename: str) -> str:
+        """
+        Build the archive with the added files and folders.
+
+        args:
+        - output_filename: The name of the output archive file (without extension `.zip`).
+        """
         output_dir = self.base_dir / "output"
         output_dir.mkdir(parents=True, exist_ok=True)
         output_zip = output_dir / f"{output_filename}.zip"
