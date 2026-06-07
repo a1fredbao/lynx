@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import io
 from pathlib import Path
 from pygments import highlight
 from pygments.formatters import ImageFormatter
@@ -13,7 +12,7 @@ def codesnap(src_file: str, lines: tuple[int, int], output_path: str, theme: str
         raise FileNotFoundError(f"Source file not found: {src_file}")
 
     start, end = lines
-    if start <= 0 or end < start:
+    if start < 1 or end < start:
         raise ValueError("lines must be a tuple(start, end) with start >= 1 and end >= start")
 
     all_lines = src.read_text(encoding="utf-8").splitlines()
@@ -32,7 +31,6 @@ def codesnap(src_file: str, lines: tuple[int, int], output_path: str, theme: str
     out = Path(output_path)
     out.parent.mkdir(parents=True, exist_ok=True)
 
-    stream = io.BytesIO(image_data)
-    out.write_bytes(stream.getvalue())
+    out.write_bytes(image_data)
 
     return str(out)
