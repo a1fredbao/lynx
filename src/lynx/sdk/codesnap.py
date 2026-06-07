@@ -1,8 +1,7 @@
 from __future__ import annotations
 
+import io
 from pathlib import Path
-
-from PIL import Image
 from pygments import highlight
 from pygments.formatters import ImageFormatter
 from pygments.lexers import get_lexer_for_filename, guess_lexer
@@ -32,7 +31,8 @@ def codesnap(src_file: str, lines: tuple[int, int], output_path: str, theme: str
 
     out = Path(output_path)
     out.parent.mkdir(parents=True, exist_ok=True)
-    with Image.open(__import__("io").BytesIO(image_data)) as img:
-        img.save(out, format="PNG")
+
+    stream = io.BytesIO(image_data)
+    out.write_bytes(stream.getvalue())
 
     return str(out)

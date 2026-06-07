@@ -54,7 +54,7 @@ def course(course_name: str) -> None:
         console.print(f"[red]Directory already exists:[/red] {target}")
         raise typer.Exit(code=1)
 
-    target.mkdir(parents=True, exist_ok=False)
+    target.mkdir()
     (target / "README.md").write_text(f"# {course_name}", encoding="utf-8")
     console.print(f"[green]Created course:[/green] {target}")
 
