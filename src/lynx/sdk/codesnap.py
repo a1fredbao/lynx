@@ -34,19 +34,33 @@ def _build_formatter(theme: str) -> ImageFormatter:
     raise cast(FontNotFound, last_error)
 
 
-def codesnap(src_file: str, lines: tuple[int, int], output_path: str, theme: str = "monokai") -> str:
+def codesnap(
+    src_file: str,
+    lines: tuple[int, int] | list[tuple[int, int]],
+    output_path: str,
+    theme: str = "monokai",
+) -> str:
     src = Path(src_file)
     if not src.exists() or not src.is_file():
         raise FileNotFoundError(f"Source file not found: {src_file}")
 
-    start, end = lines
-    if start < 1 or end < start:
-        raise ValueError("lines must be a tuple(start, end) with start >= 1 and end >= start")
+    if isinstance(lines, tuple):
+        lines = [lines]
+
+    for start, end in lines:
+        if start < 1 or end < start:
+            raise ValueError(
+                "Every element in lines must be a tuple(start, end) with start >= 1 and end >= start."
+            )
 
     all_lines = src.read_text(encoding="utf-8").splitlines()
-    snippet = "\n".join(all_lines[start - 1 : end])
+    snippet = ""
+
+    for start, end in lines:
+        snippet += "\n".join(all_lines[start - 1 : end])
+
     if not snippet:
-        raise ValueError("The requested line range is empty")
+        raise ValueError("The requested line range is empty.")
 
     try:
         lexer = get_lexer_for_filename(src.name, snippet)

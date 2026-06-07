@@ -38,7 +38,9 @@ class Packer:
 
         if ignore_patterns:
             for pattern in ignore_patterns:
-                if fnmatch.fnmatch(candidate.name, pattern) or fnmatch.fnmatch(relative, pattern):
+                if fnmatch.fnmatch(candidate.name, pattern) or fnmatch.fnmatch(
+                    relative, pattern
+                ):
                     return True
 
         return False

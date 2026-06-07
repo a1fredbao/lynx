@@ -1,9 +1,6 @@
 from pathlib import Path
-
 from typer.testing import CliRunner
-
 from lynx.cli import app
-
 
 runner = CliRunner()
 
@@ -20,7 +17,7 @@ def test_lecture_creates_standard_workspace(tmp_path: Path, monkeypatch) -> None
     monkeypatch.chdir(tmp_path)
     result = runner.invoke(app, ["lecture", "L1"])
     assert result.exit_code == 0
-    assert Path("L1/docs/materials").is_dir()
+    assert Path("L1/docs/slides").is_dir()
     assert Path("L1/docs/notes").is_dir()
     assert Path("L1/src").is_dir()
     assert Path("L1/output").is_dir()
@@ -29,7 +26,7 @@ def test_lecture_creates_standard_workspace(tmp_path: Path, monkeypatch) -> None
     assert Path("L1/pack.py").is_file()
 
 
-def test_clean_keeps_zip_and_removes_cache_files(tmp_path: Path, monkeypatch) -> None:
+def test_clean(tmp_path: Path, monkeypatch) -> None:
     monkeypatch.chdir(tmp_path)
     Path("output").mkdir()
     Path("output/final.zip").write_text("zip", encoding="utf-8")
@@ -42,7 +39,7 @@ def test_clean_keeps_zip_and_removes_cache_files(tmp_path: Path, monkeypatch) ->
 
     result = runner.invoke(app, ["clean"])
     assert result.exit_code == 0
-    assert Path("output/final.zip").exists()
+    assert not Path("output/final.zip").exists()
     assert not Path("output/temp.txt").exists()
     assert not Path("output/sub").exists()
     assert not Path("pkg/__pycache__").exists()

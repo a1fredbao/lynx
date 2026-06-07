@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import importlib.util
 import shutil
 from pathlib import Path
@@ -14,18 +12,11 @@ DEFAULT_GITIGNORE = """# Python cache
 __pycache__/
 *.py[cod]
 
-# Keep final packages only
+# Regeneratable outputs
 output/*
-!output/*.zip
-
-# Large data artifacts
-*.csv
-*.parquet
-*.h5
-*.pkl
 """
 
-PACK_TEMPLATE = '''from lynx.sdk import Packer, codesnap
+PACK_TEMPLATE = """from lynx.sdk import Packer, codesnap
 
 def make_submission():
     packer = Packer()
@@ -44,7 +35,7 @@ def make_submission():
 
 if __name__ == "__main__":
     make_submission()
-'''
+"""
 
 
 @app.command()
@@ -67,7 +58,7 @@ def lecture(lecture_name: str) -> None:
         raise typer.Exit(code=1)
 
     for folder in [
-        root / "docs" / "materials",
+        root / "docs" / "slides",
         root / "docs" / "notes",
         root / "src",
         root / "output",
@@ -95,8 +86,6 @@ def clean() -> None:
     output_dir = root / "output"
     if output_dir.exists() and output_dir.is_dir():
         for item in output_dir.iterdir():
-            if item.is_file() and item.suffix == ".zip":
-                continue
             if item.is_dir():
                 shutil.rmtree(item, ignore_errors=True)
             else:
