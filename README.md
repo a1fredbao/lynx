@@ -1,14 +1,24 @@
 # lynx
 lynx: Local Yard for Notes and eXercises. (A lecture management system)
 
-## Install locally
+It provides a simple CLI interface to manage your lecture notes and exercises. You can easily create, organize, and pack your lecture materials/homework with lynx.
+
+## Installation
+
+### With uv (recommended)
+
+```bash
+uv tool install pyLynx
+```
+
+### From source
 
 ```bash
 git clone https://github.com/a1fredbao/lynx
 uv tool install .
 ```
 
-## Development setup (uv virtual environment)
+### Development setup (uv virtual environment)
 
 ```bash
 uv sync --extra dev
