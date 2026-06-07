@@ -4,15 +4,17 @@ lynx: Local Yard for Notes and eXercises. (A lecture management system)
 ## Install locally
 
 ```bash
-pip install -e .
+uv sync
 ```
 
-For tests:
+## Development setup (uv virtual environment)
 
 ```bash
-pip install -e .[dev]
+uv sync --extra dev
 pytest
 ```
+
+`uv sync`/`uv sync --extra dev` will create and manage the project virtual environment automatically.
 
 ## CLI usage
 
