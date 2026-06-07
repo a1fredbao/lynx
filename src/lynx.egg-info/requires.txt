@@ -1,0 +1,8 @@
+typer<1.0,>=0.12
+rich>=13.0
+pygments>=2.16
+pillow>=10.0
+pathspec>=0.12
+
+[dev]
+pytest>=8.0

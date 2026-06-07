@@ -1,0 +1,2 @@
+[console_scripts]
+lynx = lynx.cli:app
