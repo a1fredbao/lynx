@@ -1,7 +1,10 @@
+import importlib
 from pathlib import Path
 from zipfile import ZipFile
 
 from lynx.sdk import Packer, codesnap
+
+codesnap_module = importlib.import_module("lynx.sdk.codesnap")
 
 
 def test_packer_add_file_and_build(tmp_path: Path, monkeypatch) -> None:
@@ -46,3 +49,28 @@ def test_codesnap_creates_png(tmp_path: Path) -> None:
 
     assert Path(result).exists()
     assert Path(result).suffix == ".png"
+
+
+def test_codesnap_falls_back_to_available_font(tmp_path: Path, monkeypatch) -> None:
+    src = tmp_path / "main.py"
+    src.write_text("print('a')\n", encoding="utf-8")
+    out = tmp_path / "output" / "snap.png"
+
+    attempts: list[str] = []
+
+    monkeypatch.setattr(codesnap_module, "_font_candidates", lambda: ["missing-font", "working-font"])
+
+    def fake_formatter(*, style: str, line_numbers: bool, font_name: str):
+        attempts.append(font_name)
+        if font_name == "missing-font":
+            raise codesnap_module.FontNotFound("missing")
+        return object()
+
+    monkeypatch.setattr(codesnap_module, "ImageFormatter", fake_formatter)
+    monkeypatch.setattr(codesnap_module, "highlight", lambda snippet, lexer, formatter: b"png-bytes")
+
+    result = codesnap_module.codesnap(str(src), lines=(1, 1), output_path=str(out))
+
+    assert Path(result).exists()
+    assert Path(result).read_bytes() == b"png-bytes"
+    assert attempts == ["missing-font", "working-font"]
