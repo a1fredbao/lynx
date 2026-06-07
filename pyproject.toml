@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lynx"
-version = "0.1.0"
+version = "1.0.0"
 description = "Lynx: Local Yard for Notes and eXercises"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.8"
 dependencies = [
   "typer>=0.12,<1.0",
   "rich>=13.0",
