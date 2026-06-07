@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyLynx"
-version = "3.0.0"
+version = "3.0.1"
 description = "Lynx: Local Yard for Notes and eXercises"
 readme = "README.md"
 requires-python = ">=3.8"
