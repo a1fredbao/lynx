@@ -4,7 +4,8 @@ lynx: Local Yard for Notes and eXercises. (A lecture management system)
 ## Install locally
 
 ```bash
-uv sync
+git clone https://github.com/a1fredbao/lynx
+uv tool install .
 ```
 
 ## Development setup (uv virtual environment)
