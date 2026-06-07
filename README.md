@@ -1,5 +1,6 @@
 # lynx
-lynx: Lecture Yard for Notes and eXercises. (A lecture management system)
+
+lynx: Lectures' Yet aNother eXporter. (A lecture management system)
 
 It provides a simple CLI interface to manage your lecture notes and exercises. You can easily create, organize, and pack your lecture materials/homework with lynx.
 

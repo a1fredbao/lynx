@@ -5,7 +5,7 @@ from pathlib import Path
 import typer
 from rich.console import Console
 
-app = typer.Typer(help="Lynx: Lecture Yard for Notes and eXercises")
+app = typer.Typer(help="Lynx: Lectures' Yet aNother eXporter")
 console = Console()
 
 DEFAULT_GITIGNORE = """# Python cache
