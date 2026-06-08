@@ -28,7 +28,9 @@ def make_submission():
     # packer.add_folder("src/", dest_dir="source_code/", ignore_patterns=["*.csv", "__pycache__"])
 
     # Example: Generate code snapshot and add to pack, putting line (3, 5) after (10, 25) as the sequence in the list.
-    # snap_path = codesnap("src/main.py", lines=[(10, 25), (3, 5)], output_path="output/core_logic.png")
+    # You can specify fonts available on your system, or leave it to the default font candidates.
+    # You can also specify a different theme supported by Pygments, or use the default "monokai" theme.
+    # snap_path = codesnap("src/main.py", lines=[(10, 25), (3, 5)], output_path="output/core_logic.png", font_name="Fira Code")
     # packer.add_file(snap_path, dest_path="img/core_logic.png")
 
     packer.build(output_filename="Final_Submission")

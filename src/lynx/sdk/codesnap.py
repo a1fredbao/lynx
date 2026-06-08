@@ -19,8 +19,11 @@ def _font_candidates() -> list[str]:
     return []
 
 
-def _build_formatter(theme: str) -> ImageFormatter:
+def _build_formatter(theme: str, font_name: str | None = None) -> ImageFormatter:
     candidates = _font_candidates()
+    if font_name:
+        candidates.insert(0, font_name)
+
     if not candidates:
         raise FontNotFound("No usable fonts configured for this platform")
 
@@ -39,6 +42,7 @@ def codesnap(
     lines: tuple[int, int] | list[tuple[int, int]],
     output_path: str,
     theme: str = "monokai",
+    font_name: str | None = None,
 ) -> str:
     """
     Generate a syntax-highlighted image snapshot of specific lines from a source code file.
@@ -48,6 +52,7 @@ def codesnap(
     - lines: A tuple (start, end) or a list of such tuples specifying line ranges to include in the snapshot. Line numbers are 1-based.
     - output_path: Path where the generated image will be saved.
     - theme: Pygments style to use for syntax highlighting (default: "monokai"). You can choose from any style supported by Pygments
+    - font_name: Optional specific font to use.
     """
     src = Path(src_file)
     if not src.exists() or not src.is_file():
@@ -76,7 +81,7 @@ def codesnap(
     except Exception:
         lexer = guess_lexer(snippet)
 
-    formatter = _build_formatter(theme)
+    formatter = _build_formatter(theme, font_name)
     image_data = highlight(snippet, lexer, formatter)
 
     out = Path(output_path)
