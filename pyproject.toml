@@ -7,7 +7,7 @@ name = "pyLynx"
 version = "3.0.1"
 description = "Lynx: Lectures' Yet aNother eXporter"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 dependencies = [
   "typer>=0.12,<1.0",
   "rich>=13.0",
